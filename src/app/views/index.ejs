@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MagaNets</title>
+    <meta charset="UTF-8">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="css/app.css" />
+</head>
+
+<body>
+    <div id="content">
+        <%- include('components/navbar') %>
+
+            <div class="container-fluid">
+                <%- include('components/gridProducts') %>
+            </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var cards = document.getElementsByClassName('gridProducts__card--favorite');
+            arrayCards = Array.from(cards);
+            showSaveds(arrayCards);
+            saveWishlist(arrayCards);
+        };
+
+        function saveWishlist(arrayCards){
+            arrayCards.forEach(function (card) {
+                var cardImage = card.childNodes[0];
+                const id = card.getAttribute('data-id');
+                card.onclick = function () {
+                    var key = 'wishlist';
+                    var vetor = JSON.parse(localStorage.getItem(key)) || [];
+                    if (!vetor.includes(id)) {
+                        cardImage.src = 'icons/bookmarkSelected.svg';
+                        vetor.push(id);
+                        var vetorString = JSON.stringify(vetor);
+                        localStorage.setItem(key, vetorString);
+                    }
+                };
+            });
+        }
+
+        function showSaveds(arrayCards) {
+            arrayCards.forEach(function (card) {
+                var cardImage = card.childNodes[0];
+                const id = card.getAttribute('data-id');
+                var vetor = JSON.parse(localStorage.getItem('wishlist')) || [];
+                if (vetor.includes(id)) {
+                    cardImage.src = 'icons/bookmarkSelected.svg';
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+
+</html>
